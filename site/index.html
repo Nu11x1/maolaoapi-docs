@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="MaolaoAPI 异步图片生成 API 文档、GPT 生图 Enterprise 模型参数、请求示例和轮询代码。"
+      content="MaolaoAPI 异步图片生成 API 文档、GPT Enterprise 与 Grok 生图模型参数、请求示例和轮询代码。"
     />
     <meta name="theme-color" content="#0b1020" />
     <title>MaolaoAPI 文档</title>
@@ -55,7 +55,7 @@
           <a href="#overview" class="active">快速开始</a>
           <a href="#authentication">鉴权</a>
           <a href="#submit">提交生图任务</a>
-          <a href="#enterprise-image-models">模型参数</a>
+          <a href="#image-models">模型参数</a>
           <a href="#poll">查询任务状态</a>
           <a href="#content">下载图片</a>
           <a href="#edits">编辑图片</a>
@@ -188,14 +188,14 @@
               <code>size</code
               ><span
                 >例如 <code>1024x1024</code>。GPT 生图 Enterprise
-                模型不传时默认 <code>1024x1024</code>。</span
+                模型不传时默认 <code>1024x1024</code>；Grok 生图模型使用 <code>extra_fields.aspect_ratio</code>。</span
               >
             </div>
             <div>
               <code>quality</code
               ><span
                 >例如 <code>auto</code>、<code>standard</code>、<code>medium</code>、<code>high</code>。GPT
-                生图 Enterprise 模型不传时默认 <code>medium</code>。</span
+                生图 Enterprise 模型不传时默认 <code>medium</code>；Grok 生图模型不补 <code>quality</code>。</span
               >
             </div>
             <div>
@@ -212,12 +212,12 @@
             <li><code>edits</code>、<code>images/edits</code>：图片编辑。</li>
           </ul>
         </section>
-        <section class="doc-section" id="enterprise-image-models">
+        <section class="doc-section" id="image-models">
           <div class="section-kicker">生成图片</div>
-          <h2>GPT 生图 Enterprise 模型参数</h2>
+          <h2>生图模型参数</h2>
           <p>
-            下面只列 MaolaoAPI 对外可调用的 Enterprise
-            模型名和常用图片参数。请求时直接传这些模型名即可，不需要了解或填写渠道内部映射。
+            下面只列 MaolaoAPI 对外可调用的生图模型名和常用图片参数。
+            请求时直接传这些模型名即可，不需要了解或填写渠道内部映射。
           </p>
 
           <div class="callout note">
@@ -231,8 +231,8 @@
             </div>
           </div>
 
-          <div class="model-tabs" data-tab-group="enterprise-image-models">
-            <div class="tab-list" role="tablist" aria-label="GPT 生图 Enterprise 模型参数">
+          <div class="model-tabs" data-tab-group="image-models">
+            <div class="tab-list" role="tablist" aria-label="生图模型参数">
               <button
                 id="tab-gpt-image-1-enterprise"
                 class="model-tab-button active"
@@ -265,6 +265,17 @@
                 data-target="gpt-image-2-enterprise"
               >
                 gpt-image-2-enterprise
+              </button>
+              <button
+                id="tab-grok-imagine-image"
+                class="model-tab-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="grok-imagine-image"
+                data-target="grok-imagine-image"
+              >
+                grok-imagine-image
               </button>
             </div>
 
@@ -385,6 +396,65 @@
                   </tbody>
                 </table>
               </div>
+            </article>
+
+            <article
+              id="grok-imagine-image"
+              class="tab-panel"
+              role="tabpanel"
+              aria-labelledby="tab-grok-imagine-image"
+              hidden
+            >
+              <div class="model-summary">
+                <div>
+                  <span>模型名</span>
+                  <strong>grok-imagine-image</strong>
+                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
+                </div>
+                <div>
+                  <span>参数形态</span>
+                  <strong>resolution + aspect_ratio</strong>
+                  <small>建议通过 <code>extra_fields</code> 传分辨率和画幅比例。</small>
+                </div>
+              </div>
+              <div class="parameter-table-wrapper">
+                <table class="parameter-table">
+                  <thead>
+                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>size</code></td>
+                      <td>不补</td>
+                      <td>建议改用 <code>extra_fields.aspect_ratio</code> 表达比例；显式传入 <code>size</code> 时是否生效以上游返回为准。</td>
+                    </tr>
+                    <tr>
+                      <td><code>quality</code></td>
+                      <td>不补</td>
+                      <td>网关默认不发送 <code>quality</code>；显式传入时是否支持以上游返回为准。</td>
+                    </tr>
+                    <tr>
+                      <td><code>extra_fields.resolution</code></td>
+                      <td><code>1k</code></td>
+                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
+                    </tr>
+                    <tr>
+                      <td><code>extra_fields.aspect_ratio</code></td>
+                      <td><code>1:1</code></td>
+                      <td>不传时由网关补入；例如可显式传 <code>16:9</code>。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <pre data-language="JSON"><code>{
+  "model": "grok-imagine-image",
+  "prompt": "一辆停在雨夜街角的复古跑车",
+  "extra_fields": {
+    "resolution": "2k",
+    "aspect_ratio": "16:9"
+  },
+  "response_format": "b64_json"
+}</code></pre>
             </article>
           </div>
         </section>

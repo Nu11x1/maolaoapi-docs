@@ -7,7 +7,7 @@ MaolaoAPI 的公开 API 调用文档与示例代码。
 - `POST /v1/images/tasks`：提交异步图片生成或编辑任务
 - `GET /v1/images/tasks/{task_id}`：查询任务状态与结果
 - `GET /v1/images/tasks/{task_id}/content/{index}`：获取受保护的图片正文
-- GPT 生图 Enterprise 模型参数：`gpt-image-1-enterprise`、`gpt-image-1.5-enterprise`、`gpt-image-2-enterprise` 的默认 `size` 和 `quality`
+- 生图模型参数：`gpt-image-1-enterprise`、`gpt-image-1.5-enterprise`、`gpt-image-2-enterprise`、`grok-imagine-image` 的默认图片参数
 
 异步任务请求多张图片时，调用方应以
 `result.data.length` 判断实际交付数量。固定按张计费会按实际可交付数量结算，
