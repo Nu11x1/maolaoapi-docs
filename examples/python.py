@@ -37,7 +37,7 @@ submitted = request_json(
     f"{BASE_URL}/v1/images/tasks",
     method="POST",
     payload={
-        "model": os.getenv("MAOLAO_IMAGE_MODEL", "gpt-image-2"),
+        "model": os.getenv("MAOLAO_IMAGE_MODEL", "gpt-image-2-enterprise"),
         "prompt": prompt,
         "n": 1,
         "size": "1024x1024",

@@ -9,7 +9,7 @@ curl --request POST "${BASE_URL}/v1/images/tasks" \
   --header "Authorization: Bearer ${MAOLAO_API_KEY}" \
   --header 'Content-Type: application/json' \
   --data '{
-    "model": "gpt-image-2",
+    "model": "gpt-image-2-enterprise",
     "prompt": "一只坐在月球上的橘猫，电影级光影",
     "n": 1,
     "size": "1024x1024",

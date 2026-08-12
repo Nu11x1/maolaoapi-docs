@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="MaolaoAPI 异步图片生成 API 文档、AtlasCloud 模型参数、请求示例和轮询代码。"
+      content="MaolaoAPI 异步图片生成 API 文档、GPT 生图 Enterprise 模型参数、请求示例和轮询代码。"
     />
     <meta name="theme-color" content="#0b1020" />
     <title>MaolaoAPI 文档</title>
@@ -55,7 +55,7 @@
           <a href="#overview" class="active">快速开始</a>
           <a href="#authentication">鉴权</a>
           <a href="#submit">提交生图任务</a>
-          <a href="#atlascloud-models">模型参数</a>
+          <a href="#enterprise-image-models">模型参数</a>
           <a href="#poll">查询任务状态</a>
           <a href="#content">下载图片</a>
           <a href="#edits">编辑图片</a>
@@ -149,7 +149,7 @@
   -H "Authorization: Bearer sk-你的API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-image-2",
+    "model": "gpt-image-2-enterprise",
     "prompt": "一只坐在月球上的橘猫，电影级光影",
     "size": "1024x1024",
     "quality": "high",
@@ -187,17 +187,15 @@
             <div>
               <code>size</code
               ><span
-                >例如 <code>1024x1024</code>。AtlasCloud OpenAI 图像模型不传时默认
-                <code>1024x1024</code>；Grok 模型使用
-                <code>extra_fields.aspect_ratio</code>。</span
+                >例如 <code>1024x1024</code>。GPT 生图 Enterprise
+                模型不传时默认 <code>1024x1024</code>。</span
               >
             </div>
             <div>
               <code>quality</code
               ><span
-                >例如 <code>auto</code>、<code>standard</code>、<code>medium</code>、<code>high</code>。AtlasCloud
-                OpenAI 图像模型不传时默认 <code>medium</code>；Grok 模型不补
-                <code>quality</code>。</span
+                >例如 <code>auto</code>、<code>standard</code>、<code>medium</code>、<code>high</code>。GPT
+                生图 Enterprise 模型不传时默认 <code>medium</code>。</span
               >
             </div>
             <div>
@@ -214,13 +212,12 @@
             <li><code>edits</code>、<code>images/edits</code>：图片编辑。</li>
           </ul>
         </section>
-        <section class="doc-section" id="atlascloud-models">
+        <section class="doc-section" id="enterprise-image-models">
           <div class="section-kicker">生成图片</div>
-          <h2>AtlasCloud 模型参数</h2>
+          <h2>GPT 生图 Enterprise 模型参数</h2>
           <p>
-            AtlasCloud 渠道通过“模型重定向”把 MaolaoAPI 对外模型名映射到
-            AtlasCloud 的 <code>provider/model/task</code>
-            上游模型名。即使你使用业务别名，默认参数也按映射后的上游模型判断。
+            下面只列 MaolaoAPI 对外可调用的 Enterprise
+            模型名和常用图片参数。请求时直接传这些模型名即可，不需要了解或填写渠道内部映射。
           </p>
 
           <div class="callout note">
@@ -229,71 +226,59 @@
               <strong>显式参数优先</strong>
               <p>
                 表格中的默认值只在请求没有传同名参数时补入；显式传入的
-                <code>size</code>、<code>quality</code>、<code>extra_fields</code>
-                或未知扩展字段会覆盖默认 payload，并进入后台规格计费维度。
+                <code>size</code>、<code>quality</code> 或其他扩展字段会优先生效，并进入后台规格计费维度。
               </p>
             </div>
           </div>
 
-          <div class="model-tabs" data-tab-group="atlascloud-models">
-            <div class="tab-list" role="tablist" aria-label="AtlasCloud 图片模型参数">
+          <div class="model-tabs" data-tab-group="enterprise-image-models">
+            <div class="tab-list" role="tablist" aria-label="GPT 生图 Enterprise 模型参数">
               <button
-                id="tab-atlas-gpt-image-1"
+                id="tab-gpt-image-1-enterprise"
                 class="model-tab-button active"
                 type="button"
                 role="tab"
                 aria-selected="true"
-                aria-controls="atlas-gpt-image-1"
-                data-target="atlas-gpt-image-1"
+                aria-controls="gpt-image-1-enterprise"
+                data-target="gpt-image-1-enterprise"
               >
-                gpt-image-1
+                gpt-image-1-enterprise
               </button>
               <button
-                id="tab-atlas-gpt-image-15"
+                id="tab-gpt-image-one-five-enterprise"
                 class="model-tab-button"
                 type="button"
                 role="tab"
                 aria-selected="false"
-                aria-controls="atlas-gpt-image-15"
-                data-target="atlas-gpt-image-15"
+                aria-controls="gpt-image-one-five-enterprise"
+                data-target="gpt-image-one-five-enterprise"
               >
-                gpt-image-1.5
+                gpt-image-1.5-enterprise
               </button>
               <button
-                id="tab-atlas-gpt-image-2"
+                id="tab-gpt-image-2-enterprise"
                 class="model-tab-button"
                 type="button"
                 role="tab"
                 aria-selected="false"
-                aria-controls="atlas-gpt-image-2"
-                data-target="atlas-gpt-image-2"
+                aria-controls="gpt-image-2-enterprise"
+                data-target="gpt-image-2-enterprise"
               >
-                gpt-image-2
-              </button>
-              <button
-                id="tab-atlas-grok-image"
-                class="model-tab-button"
-                type="button"
-                role="tab"
-                aria-selected="false"
-                aria-controls="atlas-grok-image"
-                data-target="atlas-grok-image"
-              >
-                grok-imagine-image
+                gpt-image-2-enterprise
               </button>
             </div>
 
             <article
-              id="atlas-gpt-image-1"
+              id="gpt-image-1-enterprise"
               class="tab-panel active"
               role="tabpanel"
-              aria-labelledby="tab-atlas-gpt-image-1"
+              aria-labelledby="tab-gpt-image-1-enterprise"
             >
               <div class="model-summary">
                 <div>
-                  <span>上游映射</span>
-                  <strong>openai/gpt-image-1/text-to-image</strong>
-                  <small><code>action=edits</code> 时派生为 <code>openai/gpt-image-1/edit</code></small>
+                  <span>模型名</span>
+                  <strong>gpt-image-1-enterprise</strong>
+                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
                 </div>
                 <div>
                   <span>结果读取</span>
@@ -310,7 +295,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样转发，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -323,22 +308,22 @@
             </article>
 
             <article
-              id="atlas-gpt-image-15"
+              id="gpt-image-one-five-enterprise"
               class="tab-panel"
               role="tabpanel"
-              aria-labelledby="tab-atlas-gpt-image-15"
+              aria-labelledby="tab-gpt-image-one-five-enterprise"
               hidden
             >
               <div class="model-summary">
                 <div>
-                  <span>上游映射</span>
-                  <strong>openai/gpt-image-1.5/text-to-image</strong>
-                  <small><code>action=edits</code> 时派生为 <code>openai/gpt-image-1.5/edit</code></small>
+                  <span>模型名</span>
+                  <strong>gpt-image-1.5-enterprise</strong>
+                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
                 </div>
                 <div>
                   <span>编辑输入</span>
                   <strong>1～10 张输入图</strong>
-                  <small>本地文件会先上传到 AtlasCloud <code>uploadMedia</code>，再提交最终编辑任务。</small>
+                  <small>编辑任务可传远程图片 URL、data URL 或 multipart 本地文件。</small>
                 </div>
               </div>
               <div class="parameter-table-wrapper">
@@ -350,7 +335,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样转发，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -363,22 +348,22 @@
             </article>
 
             <article
-              id="atlas-gpt-image-2"
+              id="gpt-image-2-enterprise"
               class="tab-panel"
               role="tabpanel"
-              aria-labelledby="tab-atlas-gpt-image-2"
+              aria-labelledby="tab-gpt-image-2-enterprise"
               hidden
             >
               <div class="model-summary">
                 <div>
-                  <span>上游映射</span>
-                  <strong>openai/gpt-image-2/text-to-image</strong>
-                  <small><code>action=edits</code> 时派生为 <code>openai/gpt-image-2/edit</code></small>
+                  <span>模型名</span>
+                  <strong>gpt-image-2-enterprise</strong>
+                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
                 </div>
                 <div>
-                  <span>轮询窗口</span>
-                  <strong>最多 300 秒</strong>
-                  <small>该模型比普通图片模型更容易超过 120 秒，网关已单独延长 prediction 轮询时间。</small>
+                  <span>轮询建议</span>
+                  <strong>最长可能接近 300 秒</strong>
+                  <small>该模型耗时可能比普通图片模型更长；客户端应持续轮询任务状态，不要用提交请求是否超时判断结果。</small>
                 </div>
               </div>
               <div class="parameter-table-wrapper">
@@ -390,7 +375,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样转发，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -400,65 +385,6 @@
                   </tbody>
                 </table>
               </div>
-            </article>
-
-            <article
-              id="atlas-grok-image"
-              class="tab-panel"
-              role="tabpanel"
-              aria-labelledby="tab-atlas-grok-image"
-              hidden
-            >
-              <div class="model-summary">
-                <div>
-                  <span>上游映射</span>
-                  <strong>xai/grok-imagine-image/text-to-image</strong>
-                  <small><code>action=edits</code> 时派生为 <code>xai/grok-imagine-image/edit</code></small>
-                </div>
-                <div>
-                  <span>参数形态</span>
-                  <strong>resolution + aspect_ratio</strong>
-                  <small>Grok 图像模型不使用 OpenAI GPT 图像模型的默认 <code>size</code>/<code>quality</code> 组合。</small>
-                </div>
-              </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td>不补</td>
-                      <td>建议改用 <code>extra_fields.aspect_ratio</code> 表达比例；是否接受 <code>size</code> 取决于上游。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td>不补</td>
-                      <td>网关默认不发送 <code>quality</code>；显式传入时会透传，是否支持以上游返回为准。</td>
-                    </tr>
-                    <tr>
-                      <td><code>extra_fields.resolution</code></td>
-                      <td><code>1k</code></td>
-                      <td>不传时由网关补入；显式传入时原样转发，并作为 <code>resolution</code> 计费维度。</td>
-                    </tr>
-                    <tr>
-                      <td><code>extra_fields.aspect_ratio</code></td>
-                      <td><code>1:1</code></td>
-                      <td>不传时由网关补入；例如可显式传 <code>16:9</code>。</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <pre data-language="JSON"><code>{
-  "model": "grok-imagine-image",
-  "prompt": "一辆停在雨夜街角的复古跑车",
-  "extra_fields": {
-    "resolution": "2k",
-    "aspect_ratio": "16:9"
-  },
-  "response_format": "b64_json"
-}</code></pre>
             </article>
           </div>
         </section>
@@ -611,7 +537,7 @@ document.querySelector('#result-image').src = imageURL</code></pre>
             data-language="Bash"
           ><code>curl -X POST "https://maolaoapi.com/v1/images/tasks?action=edits" \
   -H "Authorization: Bearer sk-你的API_KEY" \
-  -F "model=gpt-image-2" \
+  -F "model=gpt-image-2-enterprise" \
   -F "prompt=把背景替换成夜晚的东京街道" \
   -F "image=@input.png" \
   -F "mask=@mask.png" \
@@ -641,7 +567,7 @@ async function createImageTask() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'gpt-image-2',
+      model: 'gpt-image-2-enterprise',
       prompt: '一座漂浮在云海上的未来城市',
       size: '1024x1024',
       quality: 'high',

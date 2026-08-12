@@ -12,7 +12,7 @@ const response = await fetch(`${baseURL}/v1/images/tasks`, {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    model: process.env.MAOLAO_IMAGE_MODEL || "gpt-image-2",
+    model: process.env.MAOLAO_IMAGE_MODEL || "gpt-image-2-enterprise",
     prompt:
       process.argv.slice(2).join(" ") || "一只坐在月球上的橘猫，电影级光影",
     n: 1,
