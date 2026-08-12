@@ -619,6 +619,123 @@ pre::before {
   font-size: 13px;
 }
 
+.model-tabs {
+  overflow: hidden;
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.tab-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  padding: 10px;
+}
+
+.model-tab-button {
+  flex: 0 0 auto;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 750;
+  transition:
+    background 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.model-tab-button:hover,
+.model-tab-button.active {
+  border-color: color-mix(in srgb, var(--primary) 34%, transparent);
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.tab-panel {
+  padding: 20px;
+}
+
+.model-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.model-summary > div {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--surface-solid) 72%, transparent);
+  padding: 13px;
+}
+
+.model-summary span,
+.model-summary small {
+  display: block;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.model-summary strong {
+  display: block;
+  margin: 4px 0;
+  color: var(--heading);
+  font-size: 13px;
+}
+
+.parameter-table-wrapper {
+  overflow-x: auto;
+}
+
+.parameter-table {
+  width: 100%;
+  min-width: 620px;
+  border-spacing: 0;
+  border-collapse: separate;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-solid);
+}
+
+.parameter-table th,
+.parameter-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.parameter-table th {
+  color: var(--heading);
+  font-size: 12px;
+}
+
+.parameter-table td {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.parameter-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.parameter-table td:first-child,
+.parameter-table td:nth-child(2) {
+  white-space: nowrap;
+}
+
+.parameter-table code {
+  white-space: nowrap;
+}
+
 ul {
   color: var(--text-muted);
   padding-left: 22px;
@@ -875,6 +992,10 @@ footer p {
   .status-grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .model-summary {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -910,6 +1031,17 @@ footer p {
     gap: 6px;
   }
 
+  .tab-panel {
+    padding: 14px;
+  }
+
+  .tab-list {
+    padding: 8px;
+  }
+
+  .parameter-table {
+    min-width: 560px;
+  }
   .endpoint-card {
     align-items: flex-start;
     flex-direction: column;

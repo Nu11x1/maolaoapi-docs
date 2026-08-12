@@ -7,6 +7,7 @@ MaolaoAPI 的公开 API 调用文档与示例代码。
 - `POST /v1/images/tasks`：提交异步图片生成或编辑任务
 - `GET /v1/images/tasks/{task_id}`：查询任务状态与结果
 - `GET /v1/images/tasks/{task_id}/content/{index}`：获取受保护的图片正文
+- AtlasCloud 生成图片模型参数：`gpt-image-1`、`gpt-image-1.5`、`gpt-image-2`、`grok-imagine-image` 的默认 `size`、`quality`、`resolution` 和 `aspect_ratio`
 
 异步任务请求多张图片时，调用方应以
 `result.data.length` 判断实际交付数量。固定按张计费会按实际可交付数量结算，

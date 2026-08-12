@@ -67,6 +67,36 @@ document.querySelectorAll("pre").forEach((pre) => {
   });
 });
 
+document.querySelectorAll(".model-tabs").forEach((tabs) => {
+  const buttons = [...tabs.querySelectorAll(".model-tab-button")];
+  const panels = [...tabs.querySelectorAll(".tab-panel")];
+
+  function activate(targetId) {
+    buttons.forEach((button) => {
+      const active = button.dataset.target === targetId;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    panels.forEach((panel) => {
+      const active = panel.id === targetId;
+      panel.classList.toggle("active", active);
+      panel.hidden = !active;
+    });
+  }
+
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => activate(button.dataset.target));
+    button.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const offset = event.key === "ArrowRight" ? 1 : -1;
+      const next = buttons[(index + offset + buttons.length) % buttons.length];
+      next.focus();
+      activate(next.dataset.target);
+    });
+  });
+});
 const sections = navLinks
   .map((link) => document.querySelector(link.getAttribute("href")))
   .filter(Boolean);
