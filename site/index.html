@@ -231,6 +231,22 @@
             </div>
           </div>
 
+          <div class="callout warning">
+            <div class="callout-icon">!</div>
+            <div>
+              <strong>GPT Image 系列不支持 4K 或任意像素尺寸</strong>
+              <p>
+                <code>gpt-image-1-enterprise</code>、<code>gpt-image-1.5-enterprise</code>
+                和 <code>gpt-image-2-enterprise</code> 的 <code>size</code>
+                只接受 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>
+                或 <code>auto</code>。不要传 <code>3840x2160</code>、<code>1920x1080</code>
+                或 <code>4k</code>；需要 16:9 可用 <code>1536x1024</code>，需要分辨率和画幅比例时请切换到
+                <code>grok-imagine-image</code>，并使用 <code>extra_fields.resolution</code>
+                与 <code>extra_fields.aspect_ratio</code>。
+              </p>
+            </div>
+          </div>
+
           <div class="model-tabs" data-tab-group="image-models">
             <div class="tab-list" role="tablist" aria-label="生图模型参数">
               <button
@@ -306,7 +322,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -346,7 +362,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -386,7 +402,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
+                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -426,7 +442,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td>不补</td>
-                      <td>建议改用 <code>extra_fields.aspect_ratio</code> 表达比例；显式传入 <code>size</code> 时是否生效以上游返回为准。</td>
+                      <td>建议不要传顶层 <code>size</code>；改用 <code>extra_fields.resolution</code> 与 <code>extra_fields.aspect_ratio</code> 表达分辨率和比例。显式传入 <code>size</code> 时是否生效以上游返回为准。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
