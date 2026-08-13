@@ -282,6 +282,17 @@
                 gpt-image-2-enterprise
               </button>
               <button
+                id="tab-gpt-image-2-4k"
+                class="model-tab-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="gpt-image-2-4k"
+                data-target="gpt-image-2-4k"
+              >
+                gpt-image-2-4K
+              </button>
+              <button
                 id="tab-grok-imagine-image"
                 class="model-tab-button"
                 type="button"
@@ -401,12 +412,52 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>支持 4K 档位；不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的尺寸限制。前端可以将 <code>4k</code> 或 <code>3840x2160</code> 作为该模型及 <code>gpt-image-2-4K</code> 的可选能力；其他自定义尺寸仍应按后台模型能力表禁用。</td>
+                      <td>支持 4K 档位；不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的尺寸限制。前端可以将 <code>4k</code> 或 <code>3840x2160</code> 作为该模型及 <code>gpt-image-2-4K</code> 的可选能力；其他尺寸仍应按后台模型能力表禁用。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
                       <td><code>medium</code></td>
                       <td>不传时由网关补入；图片编辑请求中 <code>standard</code> 会规范化为 <code>auto</code>。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article
+              id="gpt-image-2-4k"
+              class="tab-panel"
+              role="tabpanel"
+              aria-labelledby="tab-gpt-image-2-4k"
+              hidden
+            >
+              <div class="model-summary">
+                <div>
+                  <span>模型名</span>
+                  <strong>gpt-image-2-4K</strong>
+                  <small>GPT Image 2 的 4K 档位；用于需要 4K 输出的图片生成任务。</small>
+                </div>
+                <div>
+                  <span>尺寸能力</span>
+                  <strong>支持 4K</strong>
+                  <small>前端可展示 4K 选项，不要套用 GPT Image 1 / 1.5 的尺寸限制。</small>
+                </div>
+              </div>
+              <div class="parameter-table-wrapper">
+                <table class="parameter-table">
+                  <thead>
+                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>size</code></td>
+                      <td><code>4k</code></td>
+                      <td>4K 档位可使用 <code>4k</code> 或 <code>3840x2160</code>。不要把 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code> 限制套到该模型。</td>
+                    </tr>
+                    <tr>
+                      <td><code>quality</code></td>
+                      <td><code>medium</code></td>
+                      <td>不传时由网关补入；显式传入时是否支持以上游和后台模型能力表为准。</td>
                     </tr>
                   </tbody>
                 </table>
