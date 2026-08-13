@@ -234,15 +234,14 @@
           <div class="callout warning">
             <div class="callout-icon">!</div>
             <div>
-              <strong>GPT Image 系列不支持 4K 或任意像素尺寸</strong>
+              <strong>按具体模型限制尺寸，不要按 GPT Image 系列一刀切</strong>
               <p>
-                <code>gpt-image-1-enterprise</code>、<code>gpt-image-1.5-enterprise</code>
-                和 <code>gpt-image-2-enterprise</code> 的 <code>size</code>
-                只接受 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>
-                或 <code>auto</code>。不要传 <code>3840x2160</code>、<code>1920x1080</code>
-                或 <code>4k</code>；需要 16:9 可用 <code>1536x1024</code>，需要分辨率和画幅比例时请切换到
-                <code>grok-imagine-image</code>，并使用 <code>extra_fields.resolution</code>
-                与 <code>extra_fields.aspect_ratio</code>。
+                <code>gpt-image-1-enterprise</code> 和 <code>gpt-image-1.5-enterprise</code>
+                的 <code>size</code> 只接受 <code>1024x1024</code>、<code>1024x1536</code>、
+                <code>1536x1024</code> 或 <code>auto</code>；不要把这条限制套到
+                <code>gpt-image-2-enterprise</code> 或 <code>gpt-image-2-4K</code>，这两个属于支持
+                4K 的 GPT Image 2 档位。前端应按当前模型维护能力表；模型不支持当前尺寸或参数时，
+                禁用生成按钮或对应参数项，并提示切换模型或选择该模型支持的参数。
               </p>
             </div>
           </div>
@@ -402,7 +401,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
+                      <td>支持 4K 档位；不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的尺寸限制。前端可以将 <code>4k</code> 或 <code>3840x2160</code> 作为该模型及 <code>gpt-image-2-4K</code> 的可选能力；其他自定义尺寸仍应按后台模型能力表禁用。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>

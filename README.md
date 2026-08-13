@@ -13,7 +13,7 @@ MaolaoAPI 的公开 API 调用文档与示例代码。
 `result.data.length` 判断实际交付数量。固定按张计费会按实际可交付数量结算，
 且不超过请求的 `n`；没有可交付图片时进入失败、重试或退款流程。
 
-GPT Image Enterprise 系列的 `size` 只支持 `1024x1024`、`1024x1536`、`1536x1024` 和 `auto`；不要传 `3840x2160`、`1920x1080` 或 `4k`。需要分辨率与画幅参数时，切换到支持 `extra_fields.resolution` 和 `extra_fields.aspect_ratio` 的模型，例如 `grok-imagine-image`。
+`gpt-image-1-enterprise` 和 `gpt-image-1.5-enterprise` 的 `size` 只支持 `1024x1024`、`1024x1536`、`1536x1024` 和 `auto`；不要把这条限制套到 `gpt-image-2-enterprise` 或 `gpt-image-2-4K`，这两个属于支持 4K 的 GPT Image 2 档位。前端应按具体模型维护能力表，切换模型时禁用或清理该模型不支持的参数。
 
 ## 在线文档
 
