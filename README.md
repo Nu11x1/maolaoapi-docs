@@ -13,7 +13,7 @@ MaolaoAPI 的公开 API 调用文档与示例代码。
 `result.data.length` 判断实际交付数量。固定按张计费会按实际可交付数量结算，
 且不超过请求的 `n`；没有可交付图片时进入失败、重试或退款流程。
 
-`gpt-image-1-enterprise` 和 `gpt-image-1.5-enterprise` 的 `size` 只支持 `1024x1024`、`1024x1536`、`1536x1024` 和 `auto`；不要把这条限制套到 `gpt-image-2-enterprise` 或 `gpt-image-2-4K`，这两个属于支持 4K 的 GPT Image 2 档位。前端应按具体模型维护能力表，切换模型时禁用或清理该模型不支持的参数；例如 `gpt-image-2-enterprise` / `gpt-image-2-4K` 可以展示 4K 选项，`gpt-image-1-enterprise` / `gpt-image-1.5-enterprise` 不展示 4K。
+`gpt-image-1-enterprise` 和 `gpt-image-1.5-enterprise` 的 `size` 只支持 `1024x1024`、`1024x1536`、`1536x1024` 和 `auto`；不要把这条限制套到 `gpt-image-2-enterprise` 或 `gpt-image-2-4K`，这两个属于支持 4K 的 GPT Image 2 档位。`gpt-image-2-enterprise` / `gpt-image-2-4K` 使用 `WIDTHxHEIGHT` 自定义像素尺寸时，宽高都必须是 16 的倍数，长边不超过 3840px，短边不超过 2160px；例如 `1792x1008`、`3808x1632`、`3840x2160`、`2160x3840` 可用，`4096x4096` 或非 16 倍数尺寸应在提交前禁用或提示。前端应按具体模型维护能力表，切换模型时禁用或清理该模型不支持的参数。
 
 ## 在线文档
 

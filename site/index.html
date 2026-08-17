@@ -240,8 +240,11 @@
                 的 <code>size</code> 只接受 <code>1024x1024</code>、<code>1024x1536</code>、
                 <code>1536x1024</code> 或 <code>auto</code>；不要把这条限制套到
                 <code>gpt-image-2-enterprise</code> 或 <code>gpt-image-2-4K</code>，这两个属于支持
-                4K 的 GPT Image 2 档位。前端应按当前模型维护能力表；模型不支持当前尺寸或参数时，
-                禁用生成按钮或对应参数项，并提示切换模型或选择该模型支持的参数。
+                4K 的 GPT Image 2 档位。<code>gpt-image-2-enterprise</code> / <code>gpt-image-2-4K</code>
+                使用 <code>WIDTHxHEIGHT</code> 自定义像素尺寸时，宽高都必须是 16 的倍数，长边不超过
+                3840px，短边不超过 2160px；例如 <code>1792x1008</code>、<code>3808x1632</code>、
+                <code>3840x2160</code>、<code>2160x3840</code> 可用，<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。
+                前端应按当前模型维护能力表；模型不支持当前尺寸或参数时，禁用生成按钮或对应参数项，并提示切换模型或选择该模型支持的参数。
               </p>
             </div>
           </div>
@@ -412,7 +415,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>1024x1024</code></td>
-                      <td>支持 4K 档位；不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的尺寸限制。前端可以将 <code>4k</code> 或 <code>3840x2160</code> 作为该模型及 <code>gpt-image-2-4K</code> 的可选能力；其他尺寸仍应按后台模型能力表禁用。</td>
+                      <td>支持 4K 档位；使用 <code>WIDTHxHEIGHT</code> 自定义像素尺寸时，宽高都必须是 16 的倍数，长边不超过 3840px，短边不超过 2160px。可用示例：<code>1792x1008</code>、<code>3808x1632</code>、<code>3840x2160</code>、<code>2160x3840</code>；<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的固定尺寸限制。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
@@ -452,7 +455,7 @@
                     <tr>
                       <td><code>size</code></td>
                       <td><code>4k</code></td>
-                      <td>4K 档位可使用 <code>4k</code> 或 <code>3840x2160</code>。不要把 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code> 限制套到该模型。</td>
+                      <td>4K 档位可使用 <code>4k</code> 或合法的 <code>WIDTHxHEIGHT</code> 像素尺寸。自定义像素尺寸要求宽高都为 16 的倍数，长边不超过 3840px，短边不超过 2160px；例如 <code>3840x2160</code>、<code>2160x3840</code>、<code>3808x1632</code> 可用，<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。不要把 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code> 限制套到该模型。</td>
                     </tr>
                     <tr>
                       <td><code>quality</code></td>
