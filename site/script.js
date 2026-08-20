@@ -1,42 +1,45 @@
-const root = document.documentElement;
-const themeToggle = document.querySelector(".theme-toggle");
 const menuToggle = document.querySelector(".menu-toggle");
 const sidebarBackdrop = document.querySelector(".sidebar-backdrop");
+const sidebar = document.querySelector(".sidebar");
 const navLinks = [...document.querySelectorAll(".sidebar nav a")];
-
-function preferredTheme() {
-  const stored = localStorage.getItem("maolaoapi-docs-theme");
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
-function setTheme(theme) {
-  root.dataset.theme = theme;
-  localStorage.setItem("maolaoapi-docs-theme", theme);
-  themeToggle?.setAttribute(
-    "aria-label",
-    theme === "dark" ? "切换到浅色模式" : "切换到深色模式",
-  );
-}
-
-setTheme(preferredTheme());
-
-themeToggle?.addEventListener("click", () => {
-  setTheme(root.dataset.theme === "dark" ? "light" : "dark");
-});
 
 function closeMenu() {
   document.body.classList.remove("menu-open");
+  menuToggle?.setAttribute("aria-expanded", "false");
 }
 
 menuToggle?.addEventListener("click", () => {
-  document.body.classList.toggle("menu-open");
+  const willOpen = !document.body.classList.contains("menu-open");
+  document.body.classList.toggle("menu-open", willOpen);
+  menuToggle.setAttribute("aria-expanded", willOpen ? "true" : "false");
 });
 
 sidebarBackdrop?.addEventListener("click", closeMenu);
 navLinks.forEach((link) => link.addEventListener("click", closeMenu));
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeMenu();
+});
+
+function setActiveNav(activeId) {
+  let activeLink = null;
+
+  navLinks.forEach((link) => {
+    const active = link.getAttribute("href") === activeId;
+    link.classList.toggle("active", active);
+    if (active) activeLink = link;
+  });
+
+  if (!activeLink || !sidebar) return;
+
+  const linkRect = activeLink.getBoundingClientRect();
+  const sidebarRect = sidebar.getBoundingClientRect();
+  const hiddenAbove = linkRect.top < sidebarRect.top + 12;
+  const hiddenBelow = linkRect.bottom > sidebarRect.bottom - 12;
+
+  if (hiddenAbove || hiddenBelow) {
+    activeLink.scrollIntoView({ block: "nearest" });
+  }
+}
 
 document.querySelectorAll("pre").forEach((pre) => {
   const wrapper = document.createElement("div");
@@ -97,6 +100,7 @@ document.querySelectorAll(".model-tabs").forEach((tabs) => {
     });
   });
 });
+
 const sections = navLinks
   .map((link) => document.querySelector(link.getAttribute("href")))
   .filter(Boolean);
@@ -110,11 +114,17 @@ const observer = new IntersectionObserver(
     if (visible.length === 0) return;
     const activeId = `#${visible[0].target.id}`;
 
-    navLinks.forEach((link) => {
-      link.classList.toggle("active", link.getAttribute("href") === activeId);
-    });
+    setActiveNav(activeId);
   },
   { rootMargin: "-20% 0px -68% 0px", threshold: 0 },
 );
 
 sections.forEach((section) => observer.observe(section));
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash) setActiveNav(window.location.hash);
+});
+
+if (window.location.hash) {
+  setActiveNav(window.location.hash);
+}
