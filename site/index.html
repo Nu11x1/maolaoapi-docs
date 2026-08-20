@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="MaolaoAPI 异步图片生成 API 文档、GPT Enterprise 与 Grok 生图模型参数、请求示例和轮询代码。"
+      content="MaolaoAPI Images API 文档，包含异步图片任务、GPT Enterprise 模型尺寸、图片编辑、任务轮询和下载示例。"
     />
-    <meta name="theme-color" content="#0b1020" />
-    <title>MaolaoAPI 文档</title>
+    <meta name="theme-color" content="#fdfcfc" />
+    <title>MaolaoAPI Images API 文档</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%235b4ff7'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='34' font-family='Arial' font-weight='700' fill='white'%3EM%3C/text%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='4' fill='%23201d1d'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='20' font-family='monospace' font-weight='700' fill='%23fdfcfc'%3EML%3C/text%3E%3C/svg%3E"
     />
     <link rel="stylesheet" href="./styles.css" />
     <script src="./script.js" defer></script>
@@ -21,10 +21,10 @@
 
     <header class="topbar">
       <a class="brand" href="#top" aria-label="MaolaoAPI 文档首页">
-        <span class="brand-mark">M</span>
+        <span class="brand-mark">ML</span>
         <span>
           <strong>MaolaoAPI</strong>
-          <small>API Documentation</small>
+          <small>Images API Reference</small>
         </span>
       </a>
 
@@ -35,39 +35,57 @@
           href="https://github.com/moeacgx/maolaoapi-docs"
           target="_blank"
           rel="noreferrer"
-          aria-label="查看 GitHub 仓库"
         >
           GitHub
         </a>
-        <button class="theme-toggle" type="button" aria-label="切换深浅色">
-          <span class="theme-icon" aria-hidden="true">◐</span>
-        </button>
-        <button class="menu-toggle" type="button" aria-label="打开目录">
-          <span></span><span></span><span></span>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="打开目录"
+          aria-expanded="false"
+          aria-controls="docs-sidebar"
+        >
+          menu
         </button>
       </div>
     </header>
 
     <div class="page-shell" id="top">
-      <aside class="sidebar" aria-label="文档目录">
-        <div class="sidebar-label">异步图片 API</div>
+      <aside class="sidebar" id="docs-sidebar" aria-label="文档目录">
+        <div class="sidebar-label">/images</div>
         <nav>
-          <a href="#overview" class="active">快速开始</a>
-          <a href="#authentication">鉴权</a>
-          <a href="#submit">提交生图任务</a>
-          <a href="#image-models">模型参数</a>
-          <a href="#poll">查询任务状态</a>
-          <a href="#content">下载图片</a>
-          <a href="#edits">编辑图片</a>
-          <a href="#javascript">JavaScript 示例</a>
-          <a href="#gemini">Gemini / Imagen</a>
-          <a href="#errors">状态码与错误</a>
-          <a href="#retention">保留时间与限制</a>
+          <div class="nav-group">
+            <div class="nav-group-title">[1] 开始调用</div>
+            <a href="#overview" class="active">概览</a>
+            <a href="#authentication">鉴权</a>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">[2] 图片生成</div>
+            <a href="#submit">请求示例</a>
+            <a href="#model-sizes">模型尺寸</a>
+            <a href="#generation-params">参数说明</a>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">[3] 图片编辑</div>
+            <a href="#edits">单图编辑</a>
+            <a href="#edit-inputs">多图编辑</a>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">[4] 任务结果</div>
+            <a href="#poll">查询状态</a>
+            <a href="#content">下载图片</a>
+            <a href="#javascript">JavaScript 示例</a>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">[5] 兼容与限制</div>
+            <a href="#gemini">Gemini / Imagen</a>
+            <a href="#errors">状态码</a>
+            <a href="#retention">保留时间</a>
+          </div>
         </nav>
         <div class="sidebar-footer">
-          <span class="status-dot"></span>
           API 基础地址
-          <code>maolaoapi.com</code>
+          <code>https://maolaoapi.com</code>
         </div>
       </aside>
 
@@ -75,56 +93,54 @@
 
       <main id="main-content">
         <section class="hero doc-section" id="overview">
-          <div class="eyebrow"><span></span> Images API</div>
-          <h1>异步图片任务</h1>
-          <p class="hero-copy">
-            提交 OpenAI Images 兼容请求，立即获取任务
-            ID，然后轮询状态并读取图片。
-            适合生成时间较长、同步请求容易超时的场景。
-          </p>
+          <div>
+            <div class="eyebrow">[images api]</div>
+            <h1>异步图片生成与编辑任务</h1>
+            <p class="hero-copy">
+              使用 OpenAI Images 兼容格式提交图片任务。服务会先返回
+              <code>task_id</code>，你再轮询任务状态并读取图片内容。
+            </p>
 
-          <div class="endpoint-card">
-            <span class="method post">POST</span>
-            <code>https://maolaoapi.com/v1/images/tasks</code>
-          </div>
+            <div class="endpoint-card">
+              <span class="method">POST</span>
+              <code>https://maolaoapi.com/v1/images/tasks</code>
+            </div>
 
-          <div class="callout note">
-            <div class="callout-icon">i</div>
-            <div>
-              <strong>提交成功不等于生成成功</strong>
-              <p>
-                HTTP
-                <code>202</code>
-                只表示任务已接收。参数校验、渠道选择、余额和上游错误会在任务状态中返回。
-              </p>
+            <div class="quick-grid">
+              <article>
+                <span>[1]</span>
+                <h3>submit</h3>
+                <p>提交生图或编辑任务。</p>
+              </article>
+              <article>
+                <span>[2]</span>
+                <h3>poll</h3>
+                <p>用 task_id 查询状态。</p>
+              </article>
+              <article>
+                <span>[3]</span>
+                <h3>content</h3>
+                <p>下载受保护的图片正文。</p>
+              </article>
             </div>
           </div>
 
-          <div class="step-grid">
-            <article>
-              <span>1</span>
-              <h3>提交</h3>
-              <p>发送标准生图请求，取得 <code>task_id</code>。</p>
-            </article>
-            <article>
-              <span>2</span>
-              <h3>轮询</h3>
-              <p>每 2～3 秒查询一次，直到成功或失败。</p>
-            </article>
-            <article>
-              <span>3</span>
-              <h3>取图</h3>
-              <p>使用结果 URL 下载图片，或先获取 Blob 再展示。</p>
-            </article>
+          <div class="terminal-card" aria-label="接口流程示意">
+            <div class="terminal-title">MAOLAO IMAGES API</div>
+            <div class="terminal-row">POST /v1/images/tasks</div>
+            <div class="terminal-row">status: 202 accepted</div>
+            <div class="terminal-row">task_id: task_xxxxxxxxxx</div>
+            <div class="terminal-muted">
+              poll -> succeeded -> /content/0
+            </div>
           </div>
         </section>
 
         <section class="doc-section" id="authentication">
-          <div class="section-kicker">开始调用</div>
+          <div class="section-kicker">[auth]</div>
           <h2>所有请求都要携带 API Key</h2>
-          <p>
-            在请求头中放入 MaolaoAPI
-            令牌。示例中的密钥只是占位符，不要把真实密钥写进前端源码或公开仓库。
+          <p class="section-copy">
+            在请求头中放入 MaolaoAPI 令牌。示例里的密钥只是占位符，不要把真实密钥写进前端源码或公开仓库。
           </p>
           <pre
             data-language="HTTP"
@@ -136,11 +152,11 @@
         </section>
 
         <section class="doc-section" id="submit">
-          <div class="section-kicker">创建任务</div>
-          <h2>提交图片生成请求</h2>
-          <p>
-            请求体与 <code>/v1/images/generations</code> 相同。不传
-            <code>action</code> 时，默认创建图片生成任务。
+          <div class="section-kicker">[generation request]</div>
+          <h2>图片生成请求示例</h2>
+          <p class="section-copy">
+            不传 <code>action</code> 时，默认创建图片生成任务。请求体与
+            <code>/v1/images/generations</code> 保持兼容。
           </p>
 
           <pre
@@ -158,93 +174,87 @@
   }'</code></pre>
 
           <h3>成功接收</h3>
-          <p>服务器返回 HTTP <code>202 Accepted</code>：</p>
           <pre data-language="JSON"><code>{
   "task_id": "task_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
   "status": "queued"
 }</code></pre>
 
-          <div class="callout warning">
-            <div class="callout-icon">!</div>
+          <div class="callout">
+            <div class="callout-icon">[i]</div>
             <div>
-              <strong>当前响应不包含 request_id</strong>
-              <p>保存 <code>task_id</code>，后续查询和读取图片都使用这个值。</p>
-            </div>
-          </div>
-
-          <h3>常用参数</h3>
-          <div class="param-list">
-            <div>
-              <code>model</code><span>图片模型名称。建议始终显式填写。</span>
-            </div>
-            <div><code>prompt</code><span>图片描述或编辑指令。</span></div>
-            <div>
-              <code>n</code
-              ><span
-                >请求图片数量，默认 1。网关上限 128，渠道可能部分交付。</span
-              >
-            </div>
-            <div>
-              <code>size</code
-              ><span
-                >例如 <code>1024x1024</code>。GPT 生图 Enterprise
-                模型不传时默认 <code>1024x1024</code>；Grok 生图模型使用 <code>extra_fields.aspect_ratio</code>。</span
-              >
-            </div>
-            <div>
-              <code>quality</code
-              ><span
-                >例如 <code>auto</code>、<code>standard</code>、<code>medium</code>、<code>high</code>。GPT
-                生图 Enterprise 模型不传时默认 <code>medium</code>；Grok 生图模型不补 <code>quality</code>。</span
-              >
-            </div>
-            <div>
-              <code>response_format</code
-              ><span>建议使用 b64_json，结果会转换成轻量图片地址。</span>
-            </div>
-          </div>
-
-          <h3>支持的 action</h3>
-          <ul>
-            <li>
-              不传、<code>generations</code>、<code>images/generations</code>：图片生成。
-            </li>
-            <li><code>edits</code>、<code>images/edits</code>：图片编辑。</li>
-          </ul>
-        </section>
-        <section class="doc-section" id="image-models">
-          <div class="section-kicker">生成图片</div>
-          <h2>生图模型参数</h2>
-          <p>
-            下面只列 MaolaoAPI 对外可调用的生图模型名和常用图片参数。
-            请求时直接传这些模型名即可，不需要了解或填写渠道内部映射。
-          </p>
-
-          <div class="callout note">
-            <div class="callout-icon">i</div>
-            <div>
-              <strong>显式参数优先</strong>
+              <strong>提交成功不等于生成成功</strong>
               <p>
-                表格中的默认值只在请求没有传同名参数时补入；显式传入的
-                <code>size</code>、<code>quality</code> 或其他扩展字段会优先生效，并进入后台规格计费维度。
+                HTTP <code>202</code> 表示任务已接收。生成结果、参数错误、余额错误或模型错误都会在任务状态中返回。
               </p>
             </div>
           </div>
+        </section>
 
-          <div class="callout warning">
-            <div class="callout-icon">!</div>
+        <section class="doc-section" id="model-sizes">
+          <div class="section-kicker">[models]</div>
+          <h2>图片模型支持尺寸</h2>
+          <p class="section-copy">
+            请求时直接传 MaolaoAPI 对外模型名即可。下面列出当前常用 GPT 图片模型的
+            <code>size</code> 支持情况，其中 <code>gpt-image-2-4K</code> 是既有 4K 档位模型。
+          </p>
+
+          <div class="parameter-table-wrapper">
+            <table class="parameter-table">
+              <thead>
+                <tr>
+                  <th>模型</th>
+                  <th>默认 size</th>
+                  <th>支持尺寸</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>gpt-image-1-enterprise</code></td>
+                  <td><code>1024x1024</code></td>
+                  <td>
+                    <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>gpt-image-1.5-enterprise</code></td>
+                  <td><code>1024x1024</code></td>
+                  <td>
+                    <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>gpt-image-2-enterprise</code></td>
+                  <td><code>1024x1024</code></td>
+                  <td>
+                    <code>1024x1024</code>、<code>1024x768</code>、<code>768x1024</code>、
+                    <code>1024x1536</code>、<code>1536x1024</code>、<code>2048x2048</code>、
+                    <code>2048x1152</code>、<code>1152x2048</code>、<code>2560x1088</code>、
+                    <code>1088x2560</code>、<code>2880x2160</code>、<code>2160x2880</code>、
+                    <code>3840x2160</code>、<code>2160x3840</code>，以及符合规则的
+                    <code>WIDTHxHEIGHT</code> 自定义尺寸。
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>gpt-image-2-4K</code></td>
+                  <td><code>1024x1024</code></td>
+                  <td>
+                    支持 4K 档位输出，可使用 <code>1024x1024</code>、<code>1024x1536</code>、
+                    <code>1536x1024</code>、<code>3840x2160</code>、<code>2160x3840</code>
+                    等合法 <code>WIDTHxHEIGHT</code> 尺寸。
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout">
+            <div class="callout-icon">[!]</div>
             <div>
-              <strong>按具体模型限制尺寸，不要按 GPT Image 系列一刀切</strong>
+              <strong>gpt-image-2-enterprise 自定义尺寸规则</strong>
               <p>
-                <code>gpt-image-1-enterprise</code> 和 <code>gpt-image-1.5-enterprise</code>
-                的 <code>size</code> 只接受 <code>1024x1024</code>、<code>1024x1536</code>、
-                <code>1536x1024</code> 或 <code>auto</code>；不要把这条限制套到
-                <code>gpt-image-2-enterprise</code> 或 <code>gpt-image-2-4K</code>，这两个属于支持
-                4K 的 GPT Image 2 档位。<code>gpt-image-2-enterprise</code> / <code>gpt-image-2-4K</code>
-                使用 <code>WIDTHxHEIGHT</code> 自定义像素尺寸时，宽高都必须是 16 的倍数，长边不超过
-                3840px，短边不超过 2160px；例如 <code>1792x1008</code>、<code>3808x1632</code>、
-                <code>3840x2160</code>、<code>2160x3840</code> 可用，<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。
-                前端应按当前模型维护能力表；模型不支持当前尺寸或参数时，禁用生成按钮或对应参数项，并提示切换模型或选择该模型支持的参数。
+                <code>gpt-image-2-enterprise</code> 和 <code>gpt-image-2-4K</code>
+                使用自定义尺寸时，宽高都需要是 16 的倍数，宽高比需要在 1:3 到 3:1 之间，
+                最大不超过 <code>3840x2160</code> 等效边界。
               </p>
             </div>
           </div>
@@ -260,7 +270,7 @@
                 aria-controls="gpt-image-1-enterprise"
                 data-target="gpt-image-1-enterprise"
               >
-                gpt-image-1-enterprise
+                gpt-image-1
               </button>
               <button
                 id="tab-gpt-image-one-five-enterprise"
@@ -271,7 +281,7 @@
                 aria-controls="gpt-image-one-five-enterprise"
                 data-target="gpt-image-one-five-enterprise"
               >
-                gpt-image-1.5-enterprise
+                gpt-image-1.5
               </button>
               <button
                 id="tab-gpt-image-2-enterprise"
@@ -282,7 +292,7 @@
                 aria-controls="gpt-image-2-enterprise"
                 data-target="gpt-image-2-enterprise"
               >
-                gpt-image-2-enterprise
+                gpt-image-2
               </button>
               <button
                 id="tab-gpt-image-2-4k"
@@ -304,7 +314,7 @@
                 aria-controls="grok-imagine-image"
                 data-target="grok-imagine-image"
               >
-                grok-imagine-image
+                grok
               </button>
             </div>
 
@@ -318,32 +328,23 @@
                 <div>
                   <span>模型名</span>
                   <strong>gpt-image-1-enterprise</strong>
-                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
+                  <small>适合常规图片生成和编辑。</small>
                 </div>
                 <div>
-                  <span>结果读取</span>
-                  <strong>优先本站 content 地址</strong>
-                  <small>返回 <code>/v1/images/tasks/{task_id}/content/{index}</code> 时继续携带 Bearer Token。</small>
+                  <span>尺寸</span>
+                  <strong>三种固定尺寸</strong>
+                  <small>不支持 4K 尺寸。</small>
                 </div>
               </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td><code>1024x1024</code></td>
-                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td><code>medium</code></td>
-                      <td>不传时由网关补入；图片编辑请求中 <code>standard</code> 会规范化为 <code>auto</code>。</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="param-list">
+                <div>
+                  <code>size</code>
+                  <span><code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code></span>
+                </div>
+                <div>
+                  <code>quality</code>
+                  <span>默认 <code>medium</code>。建议使用 <code>low</code>、<code>medium</code>、<code>high</code>。</span>
+                </div>
               </div>
             </article>
 
@@ -358,32 +359,23 @@
                 <div>
                   <span>模型名</span>
                   <strong>gpt-image-1.5-enterprise</strong>
-                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
+                  <small>适合常规图片生成和编辑。</small>
                 </div>
                 <div>
                   <span>编辑输入</span>
-                  <strong>1～10 张输入图</strong>
-                  <small>编辑任务可传远程图片 URL、data URL 或 multipart 本地文件。</small>
+                  <strong>1 到 10 张输入图</strong>
+                  <small>可传远程 URL、data URL 或 multipart 本地文件。</small>
                 </div>
               </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td><code>1024x1024</code></td>
-                      <td>支持 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code>；不传时由网关补入默认值。显式传入其他尺寸（如 <code>3840x2160</code>、<code>1920x1080</code>、<code>4k</code>）会上游拒绝，不会自动降级。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td><code>medium</code></td>
-                      <td>不传时由网关补入；图片编辑请求中 <code>standard</code> 会规范化为 <code>auto</code>。</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="param-list">
+                <div>
+                  <code>size</code>
+                  <span><code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code></span>
+                </div>
+                <div>
+                  <code>quality</code>
+                  <span>默认 <code>medium</code>。建议使用 <code>low</code>、<code>medium</code>、<code>high</code>。</span>
+                </div>
               </div>
             </article>
 
@@ -398,32 +390,23 @@
                 <div>
                   <span>模型名</span>
                   <strong>gpt-image-2-enterprise</strong>
-                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
+                  <small>支持更多预设尺寸和合法自定义尺寸。</small>
                 </div>
                 <div>
                   <span>轮询建议</span>
                   <strong>最长可能接近 300 秒</strong>
-                  <small>该模型耗时可能比普通图片模型更长；客户端应持续轮询任务状态，不要用提交请求是否超时判断结果。</small>
+                  <small>请持续轮询任务状态，不要用提交请求是否超时判断结果。</small>
                 </div>
               </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td><code>1024x1024</code></td>
-                      <td>支持 4K 档位；使用 <code>WIDTHxHEIGHT</code> 自定义像素尺寸时，宽高都必须是 16 的倍数，长边不超过 3840px，短边不超过 2160px。可用示例：<code>1792x1008</code>、<code>3808x1632</code>、<code>3840x2160</code>、<code>2160x3840</code>；<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。不要套用 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的固定尺寸限制。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td><code>medium</code></td>
-                      <td>不传时由网关补入；图片编辑请求中 <code>standard</code> 会规范化为 <code>auto</code>。</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="param-list">
+                <div>
+                  <code>size</code>
+                  <span>支持上方尺寸表中的全部预设尺寸，也支持符合规则的 <code>WIDTHxHEIGHT</code>。</span>
+                </div>
+                <div>
+                  <code>quality</code>
+                  <span>默认 <code>medium</code>。建议使用 <code>low</code>、<code>medium</code>、<code>high</code>。</span>
+                </div>
               </div>
             </article>
 
@@ -438,32 +421,23 @@
                 <div>
                   <span>模型名</span>
                   <strong>gpt-image-2-4K</strong>
-                  <small>GPT Image 2 的 4K 档位；用于需要 4K 输出的图片生成任务。</small>
+                  <small>GPT Image 2 的既有 4K 档位模型。</small>
                 </div>
                 <div>
                   <span>尺寸能力</span>
-                  <strong>支持 4K</strong>
-                  <small>前端可展示 4K 选项，不要套用 GPT Image 1 / 1.5 的尺寸限制。</small>
+                  <strong>支持 4K 输出</strong>
+                  <small>不要套用 GPT Image 1 / 1.5 的三尺寸限制。</small>
                 </div>
               </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td><code>4k</code></td>
-                      <td>4K 档位可使用 <code>4k</code> 或合法的 <code>WIDTHxHEIGHT</code> 像素尺寸。自定义像素尺寸要求宽高都为 16 的倍数，长边不超过 3840px，短边不超过 2160px；例如 <code>3840x2160</code>、<code>2160x3840</code>、<code>3808x1632</code> 可用，<code>4096x4096</code> 或非 16 倍数尺寸应在提交前禁用或提示。不要把 <code>gpt-image-1-enterprise</code> / <code>gpt-image-1.5-enterprise</code> 的 <code>1024x1024</code>、<code>1024x1536</code>、<code>1536x1024</code>、<code>auto</code> 限制套到该模型。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td><code>medium</code></td>
-                      <td>不传时由网关补入；显式传入时是否支持以上游和后台模型能力表为准。</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div class="param-list">
+                <div>
+                  <code>size</code>
+                  <span>支持合法 <code>WIDTHxHEIGHT</code> 尺寸，可用于 <code>3840x2160</code>、<code>2160x3840</code> 等 4K 档位。</span>
+                </div>
+                <div>
+                  <code>quality</code>
+                  <span>建议使用 <code>low</code>、<code>medium</code>、<code>high</code>。</span>
+                </div>
               </div>
             </article>
 
@@ -478,42 +452,13 @@
                 <div>
                   <span>模型名</span>
                   <strong>grok-imagine-image</strong>
-                  <small>用于图片生成；图片编辑时使用同一个模型名并传 <code>action=edits</code>。</small>
+                  <small>使用 <code>resolution</code> 和 <code>aspect_ratio</code> 表达尺寸。</small>
                 </div>
                 <div>
-                  <span>参数形态</span>
-                  <strong>resolution + aspect_ratio</strong>
-                  <small>建议通过 <code>extra_fields</code> 传分辨率和画幅比例。</small>
+                  <span>默认</span>
+                  <strong>1k / 1:1</strong>
+                  <small>不需要传顶层 <code>quality</code>。</small>
                 </div>
-              </div>
-              <div class="parameter-table-wrapper">
-                <table class="parameter-table">
-                  <thead>
-                    <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><code>size</code></td>
-                      <td>不补</td>
-                      <td>建议不要传顶层 <code>size</code>；改用 <code>extra_fields.resolution</code> 与 <code>extra_fields.aspect_ratio</code> 表达分辨率和比例。显式传入 <code>size</code> 时是否生效以上游返回为准。</td>
-                    </tr>
-                    <tr>
-                      <td><code>quality</code></td>
-                      <td>不补</td>
-                      <td>网关默认不发送 <code>quality</code>；显式传入时是否支持以上游返回为准。</td>
-                    </tr>
-                    <tr>
-                      <td><code>extra_fields.resolution</code></td>
-                      <td><code>1k</code></td>
-                      <td>不传时由网关补入；显式传入时原样使用，并作为 <code>resolution</code> 计费维度。</td>
-                    </tr>
-                    <tr>
-                      <td><code>extra_fields.aspect_ratio</code></td>
-                      <td><code>1:1</code></td>
-                      <td>不传时由网关补入；例如可显式传 <code>16:9</code>。</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
               <pre data-language="JSON"><code>{
   "model": "grok-imagine-image",
@@ -528,27 +473,126 @@
           </div>
         </section>
 
+        <section class="doc-section" id="generation-params">
+          <div class="section-kicker">[params]</div>
+          <h2>图片生成参数说明</h2>
+          <div class="param-list">
+            <div>
+              <code>model</code>
+              <span>图片模型名称。建议始终显式填写。</span>
+            </div>
+            <div>
+              <code>prompt</code>
+              <span>图片描述或编辑指令。</span>
+            </div>
+            <div>
+              <code>n</code>
+              <span>请求图片数量，默认 1。实际交付数量以 <code>result.data.length</code> 为准。</span>
+            </div>
+            <div>
+              <code>size</code>
+              <span>GPT Enterprise 模型不传时默认 <code>1024x1024</code>。</span>
+            </div>
+            <div>
+              <code>quality</code>
+              <span>GPT Enterprise 模型不传时默认 <code>medium</code>。</span>
+            </div>
+            <div>
+              <code>response_format</code>
+              <span>建议使用 <code>b64_json</code>，结果会转换成站内图片内容地址。</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="doc-section" id="edits">
+          <div class="section-kicker">[single image edit]</div>
+          <h2>单图输入编辑</h2>
+          <p class="section-copy">
+            把 <code>action=edits</code> 放在查询参数中。图片编辑任务使用同一个对外模型名。
+          </p>
+
+          <pre
+            data-language="Bash"
+          ><code>curl -X POST "https://maolaoapi.com/v1/images/tasks?action=edits" \
+  -H "Authorization: Bearer sk-你的API_KEY" \
+  -F "model=gpt-image-2-enterprise" \
+  -F "prompt=把背景替换成夜晚的东京街道" \
+  -F "image=@input.png" \
+  -F "size=1024x1024" \
+  -F "quality=high"</code></pre>
+
+          <p class="muted">
+            异步执行可以避免等待生成结果时的 HTTP 超时，但不能绕过请求体大小限制。
+          </p>
+        </section>
+
+        <section class="doc-section" id="edit-inputs">
+          <div class="section-kicker">[multi image edit]</div>
+          <h2>多图输入编辑</h2>
+          <p class="section-copy">
+            可以重复传 <code>image</code> 字段上传多张图片。不同模型的输入图数量上限不同，超出上限会返回错误。
+          </p>
+          <pre
+            data-language="Bash"
+          ><code>curl -X POST "https://maolaoapi.com/v1/images/tasks?action=edits" \
+  -H "Authorization: Bearer sk-你的API_KEY" \
+  -F "model=gpt-image-1.5-enterprise" \
+  -F "prompt=合并两张图的主体，保持自然光照" \
+  -F "image=@input-a.png" \
+  -F "image=@input-b.png" \
+  -F "size=1024x1024" \
+  -F "quality=medium"</code></pre>
+          <div class="row-list">
+            <div>
+              <span class="row-marker">[gpt-image-1]</span>
+              <span>编辑接口最多 4 张输入图。</span>
+            </div>
+            <div>
+              <span class="row-marker">[gpt-image-1.5]</span>
+              <span>编辑接口最多 10 张输入图。</span>
+            </div>
+            <div>
+              <span class="row-marker">[gpt-image-2]</span>
+              <span>编辑接口最多 10 张输入图。</span>
+            </div>
+          </div>
+        </section>
+
         <section class="doc-section" id="poll">
-          <div class="section-kicker">轮询任务</div>
+          <div class="section-kicker">[poll]</div>
           <h2>使用 task_id 查询状态</h2>
-          <div class="endpoint-card compact">
-            <span class="method get">GET</span>
+          <div class="endpoint-card">
+            <span class="method">GET</span>
             <code>/v1/images/tasks/{task_id}</code>
           </div>
-
           <pre
             data-language="Bash"
           ><code>curl "https://maolaoapi.com/v1/images/tasks/task_xxx" \
   -H "Authorization: Bearer sk-你的API_KEY"</code></pre>
 
-          <h3>处理中</h3>
-          <pre data-language="JSON"><code>{
-  "task_id": "task_xxx",
-  "status": "processing",
-  "progress": "10%"
-}</code></pre>
+          <div class="status-grid">
+            <div>
+              <span class="status queued"></span>
+              <strong>queued</strong>
+              <small>任务已接收</small>
+            </div>
+            <div>
+              <span class="status processing"></span>
+              <strong>processing</strong>
+              <small>正在处理</small>
+            </div>
+            <div>
+              <span class="status succeeded"></span>
+              <strong>succeeded</strong>
+              <small>至少交付一张图片</small>
+            </div>
+            <div>
+              <span class="status failed"></span>
+              <strong>failed</strong>
+              <small>任务执行失败</small>
+            </div>
+          </div>
 
-          <h3>生成成功</h3>
           <pre data-language="JSON"><code>{
   "task_id": "task_xxx",
   "status": "succeeded",
@@ -564,65 +608,13 @@
     ]
   }
 }</code></pre>
-
-          <div class="callout warning">
-            <div class="callout-icon">!</div>
-            <div>
-              <strong>以实际返回数量判断交付结果</strong>
-              <p>
-                <code>succeeded</code>
-                表示至少交付了一张图片，不保证
-                <code>result.data.length</code> 与请求的
-                <code>n</code> 相等。请求多张图片时，请始终以
-                <code>result.data.length</code> 作为实际交付数量。
-              </p>
-              <p>
-                固定按张计费时按实际可交付数量结算，且不超过请求的
-                <code>n</code>；没有可交付图片时会进入失败、重试或退款流程。
-              </p>
-            </div>
-          </div>
-
-          <h3>生成失败</h3>
-          <pre data-language="JSON"><code>{
-  "task_id": "task_xxx",
-  "status": "failed",
-  "progress": "100%",
-  "error": "上游返回的错误原因"
-}</code></pre>
-
-          <div class="status-grid">
-            <div>
-              <span class="status queued"></span><strong>queued</strong
-              ><small>任务已接收</small>
-            </div>
-            <div>
-              <span class="status processing"></span><strong>processing</strong
-              ><small>正在调用上游</small>
-            </div>
-            <div>
-              <span class="status succeeded"></span><strong>succeeded</strong
-              ><small>至少交付一张图片</small>
-            </div>
-            <div>
-              <span class="status failed"></span><strong>failed</strong
-              ><small>任务执行失败</small>
-            </div>
-          </div>
-          <p class="muted">
-            <code>progress</code> 是阶段性展示值，不是上游实时进度。业务判断应以
-            <code>status</code> 为准。
-          </p>
         </section>
 
         <section class="doc-section" id="content">
-          <div class="section-kicker">获取结果</div>
+          <div class="section-kicker">[content]</div>
           <h2>下载受保护的图片内容</h2>
-          <p>
-            如果 <code>result.data[].url</code> 以
-            <code>/v1/</code> 开头，请拼接 API 域名，并继续携带 Bearer Token。
-            当上游结果包含 Base64
-            图片内容时，网关会优先返回这种稳定的本站内容地址。
+          <p class="section-copy">
+            如果 <code>result.data[].url</code> 以 <code>/v1/</code> 开头，请拼接 API 域名，并继续携带 Bearer Token。
           </p>
 
           <pre
@@ -631,67 +623,20 @@
   -H "Authorization: Bearer sk-你的API_KEY" \
   -o result.png</code></pre>
 
-          <p>
-            内容接口直接返回图片二进制，支持 PNG、JPEG、WebP、GIF 和
-            AVIF。如果上游只返回 URL，结果可能是完整的
-            <code>https://</code> 地址，此时直接使用该上游地址。
-          </p>
-
-          <div class="callout note">
-            <div class="callout-icon">i</div>
+          <div class="callout">
+            <div class="callout-icon">[i]</div>
             <div>
               <strong>浏览器需要先获取 Blob</strong>
               <p>
-                普通 <code>&lt;img src&gt;</code> 不能附加 Authorization
-                请求头，不要直接使用受保护的相对地址。
+                普通 <code>&lt;img src&gt;</code> 不能附加 Authorization 请求头，不要直接把受保护的相对地址放进
+                <code>src</code>。
               </p>
             </div>
           </div>
-
-          <pre data-language="JavaScript"><code>const response = await fetch(
-  `https://maolaoapi.com/v1/images/tasks/${taskId}/content/0`,
-  {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  },
-)
-
-if (!response.ok) {
-  throw new Error(`图片读取失败：${response.status}`)
-}
-
-const blob = await response.blob()
-const imageURL = URL.createObjectURL(blob)
-document.querySelector('#result-image').src = imageURL</code></pre>
-        </section>
-
-        <section class="doc-section" id="edits">
-          <div class="section-kicker">图片编辑</div>
-          <h2>使用 multipart/form-data 上传原图</h2>
-          <p>
-            把 <code>action=edits</code> 放在查询参数中。<code>mask</code>
-            可选，最终能力取决于模型和渠道。
-          </p>
-
-          <pre
-            data-language="Bash"
-          ><code>curl -X POST "https://maolaoapi.com/v1/images/tasks?action=edits" \
-  -H "Authorization: Bearer sk-你的API_KEY" \
-  -F "model=gpt-image-2-enterprise" \
-  -F "prompt=把背景替换成夜晚的东京街道" \
-  -F "image=@input.png" \
-  -F "mask=@mask.png" \
-  -F "size=1024x1024" \
-  -F "quality=high" \
-  -F "n=1"</code></pre>
-
-          <p class="muted">
-            异步执行只能避免等待生成结果时的 HTTP 超时，不能绕过 Cloudflare 或
-            Nginx 的请求体大小限制。
-          </p>
         </section>
 
         <section class="doc-section" id="javascript">
-          <div class="section-kicker">完整示例</div>
+          <div class="section-kicker">[example]</div>
           <h2>提交任务并等待生成完成</h2>
           <pre
             data-language="JavaScript"
@@ -736,20 +681,14 @@ async function waitForTask(taskId) {
 
     await new Promise((resolve) => setTimeout(resolve, 2500))
   }
-}
-
-const submitted = await createImageTask()
-const result = await waitForTask(submitted.task_id)
-
-console.log(result.data)</code></pre>
+}</code></pre>
         </section>
 
         <section class="doc-section" id="gemini">
-          <div class="section-kicker">渠道兼容</div>
+          <div class="section-kicker">[compat]</div>
           <h2>Imagen 可以使用同一条异步路径</h2>
-          <p>
-            请求体仍然采用 OpenAI Images 格式。当前 Gemini
-            图片适配器只支持最终上游名称以
+          <p class="section-copy">
+            请求体仍然采用 OpenAI Images 格式。当前 Gemini 图片适配器支持最终模型名称以
             <code>imagen</code> 开头的模型。
           </p>
 
@@ -768,48 +707,28 @@ console.log(result.data)</code></pre>
   }'</code></pre>
 
           <div class="compat-grid">
-            <div class="compat yes">
-              <span>✓</span>
-              <div>
-                <strong>支持</strong>
-                <p>imagen-* 以及映射后上游为 imagen-* 的业务别名。</p>
-              </div>
+            <div class="compat">
+              <strong>[+] 支持</strong>
+              <p><code>imagen-*</code> 以及映射后为 <code>imagen-*</code> 的业务别名。</p>
             </div>
-            <div class="compat no">
-              <span>×</span>
-              <div>
-                <strong>暂不支持</strong>
-                <p>Gemini 原生 contents、parts、generationConfig 请求体。</p>
-              </div>
+            <div class="compat">
+              <strong>[x] 暂不支持</strong>
+              <p>Gemini 原生 <code>contents</code>、<code>parts</code>、<code>generationConfig</code> 请求体。</p>
             </div>
           </div>
-
-          <p class="muted">
-            Gemini 原生聊天生图模型仍应使用
-            <code>/v1beta/models/{model}:generateContent</code>
-            或已有的兼容聊天路径。
-          </p>
         </section>
 
         <section class="doc-section" id="errors">
-          <div class="section-kicker">异常处理</div>
+          <div class="section-kicker">[errors]</div>
           <h2>同时处理 HTTP 状态和任务状态</h2>
           <div class="http-list">
             <div><code>200</code><span>任务查询或图片读取成功。</span></div>
             <div><code>202</code><span>任务已接收，需要继续轮询。</span></div>
-            <div>
-              <code>400</code><span>action、参数或当前任务状态不合法。</span>
-            </div>
+            <div><code>400</code><span>action、参数或当前任务状态不合法。</span></div>
             <div><code>401</code><span>API Key 缺失或无效。</span></div>
-            <div>
-              <code>404</code
-              ><span>任务、图片序号不存在，或任务不属于当前账号。</span>
-            </div>
+            <div><code>404</code><span>任务、图片序号不存在，或任务不属于当前账号。</span></div>
             <div><code>410</code><span>图片正文已经过期。</span></div>
-            <div>
-              <code>413</code
-              ><span>请求超过反向代理或 Cloudflare 上传限制。</span>
-            </div>
+            <div><code>413</code><span>请求超过上传限制。</span></div>
           </div>
 
           <pre data-language="JSON"><code>{
@@ -821,11 +740,10 @@ console.log(result.data)</code></pre>
         </section>
 
         <section class="doc-section" id="retention">
-          <div class="section-kicker">数据生命周期</div>
+          <div class="section-kicker">[limits]</div>
           <h2>图片正文默认保留 1 小时</h2>
-          <p>
-            管理员可以在性能设置中调整为 0～8760 小时。设置为 0
-            会关闭自动清理。到期后任务状态和审计记录仍然保留，但图片正文无法继续读取。
+          <p class="section-copy">
+            到期后任务状态和审计记录仍然保留，但图片正文无法继续读取。
           </p>
 
           <pre data-language="JSON"><code>{
@@ -837,51 +755,26 @@ console.log(result.data)</code></pre>
 }</code></pre>
 
           <h3>当前限制</h3>
-          <ul class="check-list">
+          <ul>
             <li>暂不提供取消任务接口。</li>
             <li>暂不提供完成回调或 Webhook。</li>
             <li>暂不提供公开的任务列表接口。</li>
             <li><code>?group=xxx</code> 不能覆盖 API Key 对应的分组。</li>
-            <li>渠道选择和限流规则与同步图片接口一致。</li>
-            <li>
-              固定按张计费以实际可交付数量结算，最多不超过请求的
-              <code>n</code>。
-            </li>
+            <li>固定按张计费以实际可交付数量结算，最多不超过请求的 <code>n</code>。</li>
           </ul>
         </section>
 
         <footer>
-          <div class="brand footer-brand">
-            <span class="brand-mark">M</span>
-            <span
-              ><strong>MaolaoAPI</strong
-              ><small>Developer Documentation</small></span
-            >
+          <div class="brand">
+            <span class="brand-mark">ML</span>
+            <span>
+              <strong>MaolaoAPI</strong>
+              <small>Developer Documentation</small>
+            </span>
           </div>
           <p>文档与 API 行为以线上版本为准。</p>
         </footer>
       </main>
-
-      <aside class="on-this-page" aria-label="本页信息">
-        <div class="mini-card">
-          <span>当前接口</span>
-          <strong>/v1/images/tasks</strong>
-          <small>异步图片生成与编辑</small>
-        </div>
-        <div class="mini-card">
-          <span>认证方式</span>
-          <strong>Bearer Token</strong>
-          <small>使用 MaolaoAPI API Key</small>
-        </div>
-        <a
-          class="feedback-link"
-          href="https://github.com/moeacgx/maolaoapi-docs/issues"
-          target="_blank"
-          rel="noreferrer"
-        >
-          文档有问题？提交 Issue →
-        </a>
-      </aside>
     </div>
   </body>
 </html>
